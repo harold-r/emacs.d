@@ -186,9 +186,11 @@
 ;; setting use-package
 (eval-when-compile (require 'use-package))
 
-;; ---------------- golang gopls lsp-ui company yasnippet -------
-;; First u need to install gopls //https://github.com/golang/tools/blob/master/gopls/doc/user.md
-;; go get golang.org/x/tools/gopls@latest // don't use -u
+;;================ go ================
+;; gopls + lsp-ui + company + yasnippet -------
+;; 1. install go, gopls(no need for lsp)
+;; 2. go install golang.org/x/tools/gopls@latest
+;; 3. add ~/go/bin to ~/.profile (otherwise 'Command "gopls" is not present on the path' error)
 
 (use-package go-mode
   :ensure t
