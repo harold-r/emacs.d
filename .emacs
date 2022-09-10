@@ -238,7 +238,6 @@
   :config
   (setq Tex-auto-save t)
   (setq Tex-parse-self t)
-  :hook (auctex-mode . company-mode) ;It's very useful
   (setq-default TeX-master nil) ; query for master file
   (setq-default TeX-engine 'xetex)) ; default engine
 
