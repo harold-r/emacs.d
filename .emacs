@@ -216,7 +216,7 @@
 (use-package company
   :ensure t
   :config
-  (global-company-mode) ;;For other use, by default go donnot need this line
+  ;;(global-company-mode) ;;For other use, by default go donnot need this line
   ;; Optionally enable completion-as-you-type behavior.
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
@@ -248,6 +248,8 @@
   :config
   (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
   (add-hook 'latex-mode-hook 'turn-on-cdlatex)   ; with Emacs latex mode
+  (add-hook 'LaTeX-mode-hook 'company-mode)   ; Very useful
+  (add-hook 'latex-mode-hook 'company-mode)   ; 
   (setq cdlatex-paired-parens "$[{(")) ; Default is "$[{", cos like (0,1])
 ;;---------------------------------End latex------------------------------
 
