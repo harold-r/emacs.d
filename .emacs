@@ -145,6 +145,20 @@
 (global-set-key [(meta up)] "\C-x\C-t\C-p\C-p\C-a")
 (global-set-key [(meta down)] "\C-n\C-x\C-t\C-p\C-a")
 
+;;Tramp in Windows
+;;Install putty first
+(when (eq system-type 'windows-nt)
+  (modify-coding-system-alist 'process "plink" 'utf-8-unix)
+  (setq tramp-default-method "plink"
+        tramp-completion-without-shell-p t)
+  (setq tramp-verbose 10)
+  (setq tramp-debug-buffer t)
+  (let ((path (getenv "PATH"))
+        (plink (expand-file-name "PuTTY" (getenv "ProgramFiles"))))
+    (setenv "PATH" (concat plink path-separator path)))
+  ;; (add-to-list 'exec-path "C:/Program Files/PuTTY/")
+  (add-to-list 'exec-path (expand-file-name "PuTTY" (getenv "ProgramFiles"))))
+
 ;; ---------------- snippets ----------------------
 ;; Proxy
 ;; To test: M-x eww then google.com, https://google.com
@@ -167,12 +181,31 @@
       (setq url-gateway-method 'native)
       (message "url-gateway-method native"))))
 
-;; delete leading whitespace at each line in region
+;; Delete leading whitespace at each line in region
 (defun delete-leading-whitespace (start end)
   (interactive "*r")
   (save-excursion
     (if (not (bolp)) (forward-line 1))
     (delete-whitespace-rectangle (point) end nil)))
+
+(defun show-unique-words (&optional alphabetical)
+  "Collect all of the unique words in the current buffer and
+display them in a new buffer.  With prefix, alphabetize the
+list."
+  (interactive "P")
+  (let ((buf (buffer-name))
+        (new (get-buffer-create "*Unique Words*"))
+        (txt (delete-dups (mapcar #'downcase
+                                  (split-string (buffer-string)
+                                                nil nil
+                                                "[^[:alnum:]]+")))))
+    (with-current-buffer new
+      (delete-region (point-min) (point-max))
+      (insert (format "%d unique words in the <%s> buffer:\n\n"
+                      (length txt) buf))
+      (cl-dolist (word (if alphabetical (sort txt #'string<) txt))
+        (insert (concat word "\n"))))
+    (pop-to-buffer new)))
 ;; ---------------- end snippets ------------------
 
 ;; ================================================================
