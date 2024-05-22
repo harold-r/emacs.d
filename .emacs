@@ -36,6 +36,8 @@
 (electric-pair-mode 1)  ;emacs24+
 (recentf-mode 1) ;recent opened files
 (global-set-key [f12] 'recentf-open-files)
+(setq recentf-max-menu-items 36) ;shows in File -> Open Recent
+(setq recentf-max-saved-items 36);
 (global-set-key [f5] 'revert-buffer) ; reload file
 (global-unset-key (kbd "C-x C-z")) ;suspend frame
 (fset 'yes-or-no-p 'y-or-n-p)
