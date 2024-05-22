@@ -259,7 +259,8 @@ list."
 (use-package yasnippet  ; Optional for go - provides snippet support.
   :ensure t
   :config
-  (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/"))
+  (when (not (eq system-type 'windows-nt))
+    (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/")))
   (yas-global-mode 1)) ;better globally
 
 (add-to-list 'auto-mode-alist '("\\.gtpl\\'" . html-mode))
