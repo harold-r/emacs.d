@@ -104,15 +104,11 @@
 (add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
 
 ;; coding
+;; Donnot set-selection-coding-system utf-16-le, causing leading non-char when coping in win
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
-(set-clipboard-coding-system 'utf-8) ; between Emacs and X windows, x-copy
-(when (eq system-type 'windows-nt) ; Copy in windows use utf-16-le
-  (set-next-selection-coding-system 'utf-16-le)
-  (set-selection-coding-system 'utf-16-le)
-  (set-clipboard-coding-system 'utf-16-le))
 
 ;; Theme: "tsdh-dark" "tango-dark"
 (when (locate-file "tango-dark-theme.el"
