@@ -211,9 +211,9 @@ list."
 ;; (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
 ;;                          ("melpa" . "https://melpa.org/packages/")))
 
-(setq package-archives '(("gnu"    . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("nongnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-                         ("melpa"  . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(setq package-archives '(("gnu"    . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                         ("melpa"  . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
 ;; use-package
 (unless (package-installed-p 'use-package)
@@ -221,6 +221,11 @@ list."
   (package-install 'use-package))
 ;; setting use-package
 (eval-when-compile (require 'use-package))
+
+;; For tables in org-mode, 解决如果混用中英对不齐的问题
+(use-package valign
+  :ensure t
+  :hook (org-mode . valign-mode))
 
 ;;================ go ================
 ;; gopls + lsp-ui + company + yasnippet -------
