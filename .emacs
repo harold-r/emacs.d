@@ -225,7 +225,12 @@ list."
 ;; For tables in org-mode, 解决如果混用中英对不齐的问题
 (use-package valign
   :ensure t
-  :hook (org-mode . valign-mode))
+  :hook (org-mode . valign-mode)
+  :config
+  ;; Solve typing lag problem
+  (setq valign-max-table-size 4000)
+  ;; Beautify table separators,borders,lines
+  (setq valign-fancy-bar t))
 
 ;;================ go ================
 ;; gopls + lsp-ui + company + yasnippet -------
