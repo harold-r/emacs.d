@@ -52,8 +52,7 @@
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
-(setq default-tab-width 4)
-(setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100))
+(setq-default tab-width 4) 
 
 ;; unique buffer name
 ;; you might locate the default.el to remove the default
@@ -119,7 +118,7 @@
 (when (eq system-type 'windows-nt)
   (set-fontset-font t 'han (font-spec :family "Sarasa Mono SC" :size 12.5)))
 
-;; Transpose lines - use the shipped C-x C-t, keyboard macro
+;; Transpose lines - use the shipped C-x C-t(built-in function transpose-lines), keyboard macro
 (global-set-key [(meta up)] "\C-x\C-t\C-p\C-p\C-a")
 (global-set-key [(meta down)] "\C-n\C-x\C-t\C-p\C-a")
 
@@ -186,16 +185,6 @@
   (package-install 'use-package))
 ;; setting use-package
 (eval-when-compile (require 'use-package))
-
-;; For tables in org-mode, 解决如果混用中英对不齐的问题
-(use-package valign
-  :ensure t
-  :hook (org-mode . valign-mode)
-  :config
-  ;; Solve typing lag problem
-  (setq valign-max-table-size 4000)
-  ;; Beautify table separators,borders,lines
-  (setq valign-fancy-bar t))
 
 ;;================ go ================
 ;; gopls + lsp-ui + company + yasnippet -------
