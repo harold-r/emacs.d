@@ -22,6 +22,7 @@
 (global-set-key "\C-z" 'set-mark-command)
 (electric-pair-mode 1)  ;emacs24+
 (recentf-mode 1) ;recent opened files
+(fido-vertical-mode 1)
 (global-set-key [f12] 'recentf-open-files)
 (setq recentf-max-menu-items 36) ;shows in File -> Open Recent
 (setq recentf-max-saved-items 36);
@@ -45,28 +46,9 @@
 (setq frame-title-format '(buffer-file-name "%f" (dired-directory dired-directory "%b"))) ;full file path
 (global-set-key "\M-/" 'hippie-expand) ;try different way of expanding
 
-;; (featured 'tramp) nil will cause "waiting for prompts from remote shell" message holding
-;; C-x f /ssh:root@1.1.1.1:/..... ;; /su::/etc/hosts
-(require 'tramp) ; for older emacs version
-
 ;; TAB
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4) 
-
-;; unique buffer name
-;; you might locate the default.el to remove the default
-(require 'uniquify)
-(setq uniquify-non-file-buffer-names t)
-(setq uniquify-after-kill-buffer-p t)
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-(setq uniquify-ignore-buffers-re "\\`\\*")
-
-(if (>= emacs-major-version 27)
-    (fido-mode 1)
-  (icomplete-mode 1) ;; M-x search commands conveniently
-  (ido-mode 1)
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)) ;; C-x C-f support
 
 ;; ibuffer, emacs 22+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -89,17 +71,21 @@
 (add-hook 'org-mode-hook 'turn-on-visual-line-mode) ; more readable for word wrap
 (add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
 
-;; coding
+;; coding: to be tested
 ;; Donnot set-selection-coding-system utf-16-le, causing leading non-char when coping in win
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
+;; (prefer-coding-system 'utf-8)
+;; (set-default-coding-systems 'utf-8)
+;; (set-terminal-coding-system 'utf-8)
+;; (set-keyboard-coding-system 'utf-8)
+;; use the following 2 lines
+(set-language-environment "UTF-8")
+(setq selection-coding-system 'utf-8)
+
 
 ;; Theme: "tsdh-dark" "tango-dark"
-(when (locate-file "tango-dark-theme.el"
-                 (custom-theme--load-path) ; C-h f load-theme to find the path
-                 '("" "c")) (load-theme 'tango-dark))
+(condition-case nil
+    (load-theme 'tango-dark t)
+  (error (message "Warning: tango-dark theme not found")))
 
 ;; Set default font. (Move cursor to font)M-x describe-char
 (cond
@@ -117,9 +103,10 @@
 (when (eq system-type 'windows-nt)
   (set-fontset-font t 'han (font-spec :family "Sarasa Mono SC" :size 12.5)))
 
-;; Transpose lines - use the shipped C-x C-t(built-in function transpose-lines), keyboard macro
-(global-set-key [(meta up)] "\C-x\C-t\C-p\C-p\C-a")
-(global-set-key [(meta down)] "\C-n\C-x\C-t\C-p\C-a")
+;; Transpose lines
+(when (>= emacs-major-version 29)
+  (keymap-global-set "M-<up>" (lambda () (interactive) (forward-line -1) (transpose-lines 1) (forward-line -2)))
+  (keymap-global-set "M-<down>" (lambda () (interactive) (forward-line 1) (transpose-lines 1) (forward-line -1))))
 
 ;;Tramp in Windows
 ;;Install putty first
