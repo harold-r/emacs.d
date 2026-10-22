@@ -1,50 +1,52 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 (setq debug-on-error t)
+(setq large-file-warning-threshold 100000000) ;;warn if size >100MB
+(setq password-cache-expiry nil) ;never forget passwd(tramp)
 
 ;; initial height and width
 (when (display-graphic-p)
   ;; width:chars, height:lines, left/top:pixels
   (setq default-frame-alist '((width . 90) (height . 40) (left . 600) (top . 30))
         initial-frame-alist nil))
-
-(add-to-list 'load-path "/backup/emacs.d/") ; yasnippets etc.
-
-(column-number-mode 1) ;display line number below
-(show-paren-mode 1) ; highlight paired braces
-(save-place-mode 1) ; emacs25.1+, goto last place where u previously visit
-(delete-selection-mode 1) ;replace selected text when typing
-; (global-auto-revert-mode 1) ;keep buffers automatically(polling every 5s) up-to-date, but not the remote files(slow)
-(desktop-save-mode 1) ;save sessions
-(add-to-list 'desktop-modes-not-to-save 'dired-mode)
-(add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
-(transient-mark-mode 1) ;selection highlight
-(global-set-key "\C-z" 'set-mark-command)
-(electric-pair-mode 1)  ;emacs24+
-(recentf-mode 1) ;recent opened files
-(fido-vertical-mode 1)
-(global-set-key [f12] 'recentf-open-files)
-(setq recentf-max-menu-items 36) ;shows in File -> Open Recent
-(setq recentf-max-saved-items 36);
-(global-set-key [f5] 'revert-buffer) ; reload file
-(global-unset-key (kbd "C-x C-z")) ;suspend frame
-(fset 'yes-or-no-p 'y-or-n-p)
-(global-font-lock-mode 1)
-(auto-save-mode 1)
-;; The  default is in the current dir with name #file#s, cluttered
-(add-to-list 'backup-directory-alist
-             (cons "." "~/.emacs-backups"))
-(setq large-file-warning-threshold 100000000) ;warning if >100MB
-(setq password-cache-expiry nil) ;never forget passwd,
 ;;"fbounup symbol": return t if the symbol has an object in it's function
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (setq scroll-margin 6
       scroll-conservatively 10000)
+
+(add-to-list 'load-path "/backup/emacs.d/") ; yasnippets etc.
+
+(column-number-mode 1) ;display line number below
+(save-place-mode 1) ; emacs25.1+, goto last place where u previously visit
+(delete-selection-mode 1) ;replace selected text when typing
+(global-auto-revert-mode 1) ;keep buffers automatically(polling every 5s) up-to-date
+(setq auto-revert-remote-files nil); but not the remote files
+
+(electric-pair-mode 1)  ;emacs24+
+(fido-vertical-mode 1)
+(fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(desktop-save-mode 1) ;save sessions
+(dolist (mode '(dired-mode fundamental-mode))
+  (add-to-list 'desktop-modes-not-to-save mode))
+
+;;Recent opened files
+(recentf-mode 1) ;recent opened files
+(setq recentf-max-saved-items 36)
+
 ;; '/usr/share/emacs/site-lisp/default.el' may override this
 (setq frame-title-format '(buffer-file-name "%f" (dired-directory dired-directory "%b"))) ;full file path
-(global-set-key "\M-/" 'hippie-expand) ;try different way of expanding
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups/")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save/" t)))
+
+(global-set-key (kbd "C-z") 'set-mark-command)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key [f5] 'revert-buffer)
+(global-set-key [f12] 'recentf-open-files)
+(global-unset-key (kbd "C-x C-z")) ;;suspend frame
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
