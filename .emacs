@@ -127,17 +127,9 @@
   (when (member "DejaVu Sans Mono" (font-family-list))
     (set-frame-font "DejaVu Sans Mono-12" t t))))
 
-;; Chinese font
-(if (string-equal system-type "windows-nt")
- (set-fontset-font
-  t
-  '(#x4e00 . #x9fff) ; a range of characters
-  (cond
-   ((member "Microsoft YaHei" (font-family-list)) "Microsoft YaHei")
-   ((member "PMingLiU" (font-family-list)) "PMingLiU")
-   ((member "Microsoft YaHei UI" (font-family-list)) "Microsoft YaHei UI")
-   ((member "MingLiU" (font-family-list)) "MingLiU")
-   ((member "DengXian" (font-family-list)) "DengXian"))))
+;; Set Chinese Char font
+(when (eq system-type 'windows-nt)
+  (set-fontset-font t 'han (font-spec :family "Sarasa Mono SC" :size 12.5)))
 
 ;; Transpose lines - use the shipped C-x C-t, keyboard macro
 (global-set-key [(meta up)] "\C-x\C-t\C-p\C-p\C-a")
@@ -183,27 +175,12 @@
 (defun delete-leading-whitespace (start end)
   (interactive "*r")
   (save-excursion
-    (if (not (bolp)) (forward-line 1))
-    (delete-whitespace-rectangle (point) end nil)))
+    (save-restriction
+      (narrow-to-region start end)
+      (goto-char (point-min))
+      (while (re-search-forward "^[ \t]+" nil t)
+        (replace-match "")))))
 
-(defun show-unique-words (&optional alphabetical)
-  "Collect all of the unique words in the current buffer and
-display them in a new buffer.  With prefix, alphabetize the
-list."
-  (interactive "P")
-  (let ((buf (buffer-name))
-        (new (get-buffer-create "*Unique Words*"))
-        (txt (delete-dups (mapcar #'downcase
-                                  (split-string (buffer-string)
-                                                nil nil
-                                                "[^[:alnum:]]+")))))
-    (with-current-buffer new
-      (delete-region (point-min) (point-max))
-      (insert (format "%d unique words in the <%s> buffer:\n\n"
-                      (length txt) buf))
-      (cl-dolist (word (if alphabetical (sort txt #'string<) txt))
-        (insert (concat word "\n"))))
-    (pop-to-buffer new)))
 ;; ---------------- end snippets ------------------
 
 ;; ================================================================
