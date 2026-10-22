@@ -52,6 +52,9 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4) 
 
+(when (eq system-type 'windows-nt)
+  (setq vc-handled-backends nil)) ;Version control.  Cos load file in git dir will cause error. But how to handle?
+
 ;; ibuffer, emacs 22+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (setq ibuffer-saved-filter-groups
@@ -82,7 +85,6 @@
 ;; use the following 2 lines
 (set-language-environment "UTF-8")
 (setq selection-coding-system 'utf-8)
-
 
 ;; Theme: "tsdh-dark" "tango-dark"
 (condition-case nil
