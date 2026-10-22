@@ -1,4 +1,3 @@
-
 (when (< emacs-major-version 27)
   (package-initialize))
 (setq debug-on-error t)
@@ -46,7 +45,7 @@
 (setq frame-title-format '(buffer-file-name "%f" (dired-directory dired-directory "%b"))) ;full file path
 (global-set-key "\M-/" 'hippie-expand) ;try different way of expanding
 
-;; (featurep 'tramp) nil will cause "waiting for prompts from remote shell" message holding
+;; (featured 'tramp) nil will cause "waiting for prompts from remote shell" message holding
 ;; C-x f /ssh:root@1.1.1.1:/..... ;; /su::/etc/hosts
 (require 'tramp) ; for older emacs version
 
@@ -158,15 +157,10 @@
       (setq url-gateway-method 'native)
       (message "url-gateway-method native"))))
 
-;; Delete leading whitespace at each line in region
+;; Delete leading whitespace from each line in selected region
 (defun delete-leading-whitespace (start end)
   (interactive "*r")
-  (save-excursion
-    (save-restriction
-      (narrow-to-region start end)
-      (goto-char (point-min))
-      (while (re-search-forward "^[ \t]+" nil t)
-        (replace-match "")))))
+  (replace-regexp "^[ \t]+" "" nil start end))
 
 ;; ---------------- end snippets ------------------
 
@@ -185,6 +179,23 @@
   (package-install 'use-package))
 ;; setting use-package
 (eval-when-compile (require 'use-package))
+
+;;================ company ================
+(use-package company
+  :ensure t
+  :config
+  ;;(global-company-mode) 
+  ;; Optionally enable completion-as-you-type behavior.
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
+;;================ yasnippet ================
+(use-package yasnippet  ; Optional for go - provides snippet support.
+  :ensure t
+  :config
+  (when (not (eq system-type 'windows-nt))
+    (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/")))
+  (yas-global-mode 1)) ;better globally
 
 ;;================ go ================
 ;; gopls + lsp-ui + company + yasnippet -------
@@ -212,25 +223,6 @@
   :ensure t
   :commands lsp-ui-mode)
 
-;; Company mode is a standard completion package that works well with lsp-mode.
-(use-package company
-  :ensure t
-  :config
-  ;;(global-company-mode) ;;For other use, by default go donnot need this line
-  ;; Optionally enable completion-as-you-type behavior.
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
-
-(use-package yasnippet  ; Optional for go - provides snippet support.
-  :ensure t
-  :config
-  (when (not (eq system-type 'windows-nt))
-    (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/")))
-  (yas-global-mode 1)) ;better globally
-
-(add-to-list 'auto-mode-alist '("\\.gtpl\\'" . html-mode))
-;; ---------------- end golang gopls lsp-ui company yasnippet ----------------
-
 ;;---------------------------------latex---------------------------------
 ;;Requirement: Tex Live(recommended)
 (use-package auctex
@@ -254,29 +246,4 @@
   (setq cdlatex-paired-parens "$[{(")) ; Default is "$[{", cos like (0,1])
 ;;---------------------------------End latex------------------------------
 
-;; (use-package auto-package-update
-;;   :ensure t
-;;   :config
-;;   ;; (setq auto-package-update-delete-old-versions t)
-;;   ;; (setq auto-package-update-hide-results t)
-;;   (auto-package-update-at-time "03:00")
-;;   (setq auto-package-update-prompt-before-update t)
-;;   (setq auto-package-update-delete-old-versions t)
-;;   (auto-package-update-maybe))
 
-;;-------------------------------------------------------------------------------------
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (cdlatex auctex auto-package-update yasnippet company lsp-ui lsp-mode use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
