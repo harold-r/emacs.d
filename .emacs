@@ -52,6 +52,17 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4) 
 
+;; coding
+;; Do not set-selection-coding-system utf-16-le, causing leading non-char when coping in win
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+;; Org-mode
+(add-hook 'org-mode-hook 'turn-on-visual-line-mode) ; more readable for word wrap
+(add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
+
 (when (eq system-type 'windows-nt)
   (setq vc-handled-backends nil)) ;Version control.  Cos load file in git dir will cause error. But how to handle?
 
@@ -71,17 +82,6 @@
 (add-hook 'ibuffer-mode-hook
           '(lambda ()
            (ibuffer-switch-to-saved-filter-groups "home")))
-
-;; Org-mode
-(add-hook 'org-mode-hook 'turn-on-visual-line-mode) ; more readable for word wrap
-(add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
-
-;; coding
-;; Donnot set-selection-coding-system utf-16-le, causing leading non-char when coping in win
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
 
 ;; Theme: "tsdh-dark" "tango-dark"
 (condition-case nil
