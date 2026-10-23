@@ -76,15 +76,12 @@
 (add-hook 'org-mode-hook 'turn-on-visual-line-mode) ; more readable for word wrap
 (add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
 
-;; coding: to be tested
+;; coding
 ;; Donnot set-selection-coding-system utf-16-le, causing leading non-char when coping in win
 ;; (prefer-coding-system 'utf-8)
 ;; (set-default-coding-systems 'utf-8)
 ;; (set-terminal-coding-system 'utf-8)
 ;; (set-keyboard-coding-system 'utf-8)
-;; use the following 2 lines
-(set-language-environment "UTF-8")
-(setq selection-coding-system 'utf-8)
 
 ;; Theme: "tsdh-dark" "tango-dark"
 (condition-case nil
