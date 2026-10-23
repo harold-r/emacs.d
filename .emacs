@@ -185,53 +185,25 @@
     (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/")))
   (yas-global-mode 1)) ;better globally
 
-;;================ go ================
-;; gopls + lsp-ui + company + yasnippet -------
-;; 1. install go, gopls(no need for lsp)
-;; 2. go install golang.org/x/tools/gopls@latest
-;; 3. add ~/go/bin to ~/.profile (otherwise 'Command "gopls" is not present on the path' error)
-
-(use-package go-mode
-  :ensure t
-  :commands go-mode)
-
-(use-package lsp-mode
-  :ensure t
-  :commands (lsp lsp-deferred)
-  :hook (go-mode . lsp-deferred))
-
-;; Set up before-save hooks to format buffer and add/delete imports.
-;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-
-(use-package lsp-ui  ; Optional - provides fancier overlays.
-  :ensure t
-  :commands lsp-ui-mode)
-
 ;;---------------------------------latex---------------------------------
 ;;Requirement: Tex Live(recommended)
 (use-package auctex
   :defer t
   :ensure t
   :config
-  (setq Tex-auto-save t)
-  (setq Tex-parse-self t)
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
   (setq-default TeX-master nil) ; query for master file
-  (setq-default TeX-engine 'xetex)) ; default engine
+  (setq-default TeX-engine 'xetex) ; default engine
+  (setq TeX-PDF-mode t))
 
 ;; Used with AUCTeX to speedup insertion of environment and math templates
 ;; Also, you can do it with yasnippet
 (use-package cdlatex
   :ensure t
+  :hook (LaTeX-mode . turn-on-cdlatex)
   :config
-  (add-hook 'LaTeX-mode-hook 'turn-on-cdlatex)   ; with AUCTeX LaTeX mode
-  (add-hook 'latex-mode-hook 'turn-on-cdlatex)   ; with Emacs latex mode
-  (add-hook 'LaTeX-mode-hook 'company-mode)   ; Very useful
-  (add-hook 'latex-mode-hook 'company-mode)   ; 
-  (setq cdlatex-paired-parens "$[{(")) ; Default is "$[{", cos like (0,1])
+  (setq cdlatex-paired-parens "$[{("))
 ;;---------------------------------End latex------------------------------
 
 
