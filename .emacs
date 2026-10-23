@@ -24,7 +24,7 @@
 (setq auto-revert-remote-files nil); but not the remote files
 
 (electric-pair-mode 1)  ;emacs24+
-(fido-vertical-mode 1)
+(fido-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
