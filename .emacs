@@ -145,10 +145,17 @@
       (setq url-gateway-method 'native)
       (message "url-gateway-method native"))))
 
-;; Delete leading whitespace from each line in selected region
+;; Delete leading whitespace/tab in each line
 (defun delete-leading-whitespace (start end)
   (interactive "*r")
-  (replace-regexp "^[ \t]+" "" nil start end))
+  (save-excursion
+    (let ((end-marker (copy-marker end))) ; 标记区域终点，防止字符减少导致坐标错乱
+      (goto-char start)
+      (beginning-of-line)
+      (while (< (point) end-marker)
+        (beginning-of-line)
+        (delete-horizontal-space)
+        (forward-line 1)))))
 
 ;; ---------------- end snippets ------------------
 
