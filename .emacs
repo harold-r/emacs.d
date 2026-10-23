@@ -1,8 +1,8 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 (setq debug-on-error t)
-(setq large-file-warning-threshold 100000000) ;;warn if size >100MB
-(setq password-cache-expiry nil) ;never forget passwd(tramp)
+(setq large-file-warning-threshold 100000000) ; warn if size >100MB
+(setq password-cache-expiry nil) ; never forget passwd(tramp)
 
 ;; initial height and width
 (when (display-graphic-p)
@@ -17,23 +17,23 @@
 
 (add-to-list 'load-path "/backup/emacs.d/") ; yasnippets etc.
 
-(column-number-mode 1) ;display line number below
+(column-number-mode 1) ; display line number below
 (save-place-mode 1) ; emacs25.1+, goto last place where u previously visit
-(delete-selection-mode 1) ;replace selected text when typing
-(global-auto-revert-mode 1) ;keep buffers automatically(polling every 5s) up-to-date
-(setq auto-revert-remote-files nil); but not the remote files
+(delete-selection-mode 1) ; replace selected text when typing
+(global-auto-revert-mode 1) ; keep buffers automatically(polling every 5s) up-to-date
+(setq auto-revert-remote-files nil) ; but not the remote files
 
-(electric-pair-mode 1)  ;emacs24+
+(electric-pair-mode 1)  ; emacs24+
 (fido-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(desktop-save-mode 1) ;save sessions
+(desktop-save-mode 1) ; save sessions
 (dolist (mode '(dired-mode fundamental-mode))
   (add-to-list 'desktop-modes-not-to-save mode))
 
 ;;Recent opened files
-(recentf-mode 1) ;recent opened files
+(recentf-mode 1) ; recent opened files
 (setq recentf-max-saved-items 36)
 
 ;; '/usr/share/emacs/site-lisp/default.el' may override this
@@ -46,7 +46,7 @@
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f12] 'recentf-open-files)
-(global-unset-key (kbd "C-x C-z")) ;;suspend frame
+(global-unset-key (kbd "C-x C-z")) ; suspend frame
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
@@ -72,16 +72,16 @@
           '(lambda ()
            (ibuffer-switch-to-saved-filter-groups "home")))
 
-;;; Org-mode
+;; Org-mode
 (add-hook 'org-mode-hook 'turn-on-visual-line-mode) ; more readable for word wrap
 (add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
 
 ;; coding
 ;; Donnot set-selection-coding-system utf-16-le, causing leading non-char when coping in win
-;; (prefer-coding-system 'utf-8)
-;; (set-default-coding-systems 'utf-8)
-;; (set-terminal-coding-system 'utf-8)
-;; (set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
 
 ;; Theme: "tsdh-dark" "tango-dark"
 (condition-case nil
@@ -109,8 +109,8 @@
   (keymap-global-set "M-<up>" (lambda () (interactive) (forward-line -1) (transpose-lines 1) (forward-line -2)))
   (keymap-global-set "M-<down>" (lambda () (interactive) (forward-line 1) (transpose-lines 1) (forward-line -1))))
 
-;;Tramp in Windows
-;;Install putty first
+;; Tramp in Windows
+;; Install putty first
 (when (eq system-type 'windows-nt)
   (modify-coding-system-alist 'process "plink" 'utf-8-unix)
   (setq tramp-default-method "plink"
@@ -186,7 +186,7 @@
   (yas-global-mode 1)) ;better globally
 
 ;;---------------------------------latex---------------------------------
-;;Requirement: Tex Live(recommended)
+;; Requirement: Tex Live(recommended)
 (use-package auctex
   :defer t
   :ensure t
