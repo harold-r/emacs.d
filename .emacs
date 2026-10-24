@@ -61,7 +61,6 @@
     (make-directory auto-save-dir t))
   (setq auto-save-file-name-transforms `((".*" ,auto-save-dir t))))
 
-
 (global-set-key (kbd "C-z") 'set-mark-command)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key [f5] 'revert-buffer)
@@ -88,6 +87,7 @@
 
 ;; ibuffer, emacs 22+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+(setq ibuffer-show-empty-filter-groups nil)
 (setq ibuffer-saved-filter-groups
       '(("home"
          ("Org" (or (mode . org-mode) (filename . "OrgMode")))
