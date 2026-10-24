@@ -9,14 +9,15 @@
   ;; width:chars, height:lines, left/top:pixels
   (setq default-frame-alist '((width . 90) (height . 40) (left . 600) (top . 30))
         initial-frame-alist nil))
-;;"fbounup symbol": return t if the symbol has an object in it's function
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (setq scroll-margin 6
       scroll-conservatively 10000)
+(if (fboundp 'pixel-scroll-precision-mode)
+    (pixel-scroll-precision-mode 1))
 
-(add-to-list 'load-path "/backup/emacs.d/") ; yasnippets etc.
+(when (file-directory-p "/backup/emacs.d/") (add-to-list 'load-path "/backup/emacs.d/"))
 
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
 (column-number-mode 1) ; display line number below
 (save-place-mode 1) ; emacs25.1+, goto last place where u previously visit
 (delete-selection-mode 1) ; replace selected text when typing
@@ -32,15 +33,34 @@
 (dolist (mode '(dired-mode fundamental-mode))
   (add-to-list 'desktop-modes-not-to-save mode))
 
-;;Recent opened files
-(recentf-mode 1) ; recent opened files
-(setq recentf-max-saved-items 36)
+;; Recent opened files
+(recentf-mode 1)
+(setq recentf-max-saved-items 36
+      recentf-auto-cleanup 'never
+      recentf-exclude
+      `(,"^/[^/:]+:"
+        ,"^/tmp/"
+        ,(expand-file-name "backups/" user-emacs-directory)
+        ,(expand-file-name "auto-save/" user-emacs-directory)))
 
 ;; '/usr/share/emacs/site-lisp/default.el' may override this
 (setq frame-title-format '(buffer-file-name "%f" (dired-directory dired-directory "%b"))) ;full file path
 
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups/")))
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save/" t)))
+;; Auto-save & Backup
+(let ((backup-dir (expand-file-name "backups/" user-emacs-directory))
+      (auto-save-dir (expand-file-name "auto-save/" user-emacs-directory)))
+  (setq backup-by-copying t
+        version-control t
+        kept-old-versions 2
+        kept-new-versions 5
+        delete-old-versions t)
+  (unless (file-exists-p backup-dir)
+    (make-directory backup-dir t))
+  (setq backup-directory-alist `(("." . ,backup-dir)))
+  (unless (file-exists-p auto-save-dir)
+    (make-directory auto-save-dir t))
+  (setq auto-save-file-name-transforms `((".*" ,auto-save-dir t))))
+
 
 (global-set-key (kbd "C-z") 'set-mark-command)
 (global-set-key (kbd "M-/") 'hippie-expand)
@@ -50,7 +70,7 @@
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
-(setq-default tab-width 4) 
+(setq-default tab-width 4)
 
 ;; coding
 ;; Do not set-selection-coding-system utf-16-le, causing leading non-char when coping in win
@@ -178,19 +198,22 @@
 ;;================ company ================
 (use-package company
   :ensure t
+  :init
+  (global-company-mode 1)
   :config
-  ;;(global-company-mode) 
-  ;; Optionally enable completion-as-you-type behavior.
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
+  (setq company-idle-delay 0.2
+        company-minimum-prefix-length 2
+        company-tooltip-limit 14
+        company-show-quick-access t))
 
 ;;================ yasnippet ================
-(use-package yasnippet  ; Optional for go - provides snippet support.
+(use-package yasnippet
   :ensure t
+  :init
+  (yas-global-mode 1)
   :config
   (when (not (eq system-type 'windows-nt))
-    (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/")))
-  (yas-global-mode 1)) ;better globally
+    (setq yas-snippet-dirs '("/backup/emacs.d/yas-snippets/"))))
 
 ;;---------------------------------latex---------------------------------
 ;; Requirement: Tex Live(recommended)
@@ -212,5 +235,3 @@
   :config
   (setq cdlatex-paired-parens "$[{("))
 ;;---------------------------------End latex------------------------------
-
-
