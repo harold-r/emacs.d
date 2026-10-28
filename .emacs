@@ -66,6 +66,8 @@
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f12] 'recentf-open-files)
 (global-unset-key (kbd "C-x C-z")) ; suspend frame
+(global-set-key (kbd "M-<down>") (lambda () (interactive) (forward-line 1) (transpose-lines 1) (forward-line -1)))
+(global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -1) (transpose-lines 1) (forward-line -2)))
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
@@ -123,11 +125,6 @@
 ;; Set Chinese Char font
 (when (eq system-type 'windows-nt)
   (set-fontset-font t 'han (font-spec :family "Sarasa Mono SC" :size 12.5)))
-
-;; Transpose lines
-(when (>= emacs-major-version 29)
-  (keymap-global-set "M-<up>" (lambda () (interactive) (forward-line -1) (transpose-lines 1) (forward-line -2)))
-  (keymap-global-set "M-<down>" (lambda () (interactive) (forward-line 1) (transpose-lines 1) (forward-line -1))))
 
 ;; Tramp in Windows
 ;; Install putty first
