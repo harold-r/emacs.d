@@ -66,8 +66,8 @@
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f12] 'recentf-open-files)
 (global-unset-key (kbd "C-x C-z")) ; suspend frame
+(global-set-key (kbd "M-<up>") (lambda () (interactive) (transpose-lines 1) (forward-line -2)))
 (global-set-key (kbd "M-<down>") (lambda () (interactive) (forward-line 1) (transpose-lines 1) (forward-line -1)))
-(global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line -1) (transpose-lines 1) (forward-line -2)))
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
