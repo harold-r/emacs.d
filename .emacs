@@ -66,8 +66,11 @@
 (global-set-key [f5] 'revert-buffer)
 (global-set-key [f12] 'recentf-open-files)
 (global-unset-key (kbd "C-x C-z")) ; suspend frame
-(global-set-key (kbd "M-<up>") (lambda () (interactive) (transpose-lines 1) (forward-line -2)))
-(global-set-key (kbd "M-<down>") (lambda () (interactive) (forward-line 1) (transpose-lines 1) (forward-line -1)))
+(global-set-key (kbd "M-<up>") (lambda () (interactive) (forward-line 0)
+                                 (unless (bobp) (transpose-lines 1) (forward-line -2))))
+(global-set-key (kbd "M-<down>") (lambda () (interactive) (forward-line 0)
+                                   (when (< (save-excursion (forward-line 1) (point)) (point-max))
+                                     (forward-line 1) (transpose-lines 1) (forward-line -1))))
 
 ;; TAB
 (setq-default indent-tabs-mode nil)
@@ -85,7 +88,8 @@
 (add-hook 'org-mode-hook 'org-indent-mode) ;cleaner outline view
 
 (when (eq system-type 'windows-nt)
-  (setq vc-handled-backends nil)) ;Version control.  Cos load file in git dir will cause error. But how to handle?
+  ;; Version control.  Cos load file in git dir will cause error. But how to handle?
+  (setq vc-handled-backends nil))
 
 ;; ibuffer, emacs 22+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
