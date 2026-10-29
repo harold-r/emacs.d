@@ -9,10 +9,8 @@
   ;; width:chars, height:lines, left/top:pixels
   (setq default-frame-alist '((width . 90) (height . 40) (left . 600) (top . 30))
         initial-frame-alist nil))
-(setq scroll-margin 6
-      scroll-conservatively 10000)
-(if (fboundp 'pixel-scroll-precision-mode)
-    (pixel-scroll-precision-mode 1))
+(setq scroll-margin 6 scroll-conservatively 10000)
+(if (fboundp 'pixel-scroll-precision-mode) (pixel-scroll-precision-mode 1))
 
 (when (file-directory-p "/backup/emacs.d/") (add-to-list 'load-path "/backup/emacs.d/"))
 
